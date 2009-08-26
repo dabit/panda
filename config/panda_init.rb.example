@@ -38,6 +38,13 @@ Panda::Config.use do |p|
   # p[:videos_store]          = :filesystem
   # p[:videos_domain]         = "localhost:4000/store"
   # p[:public_videos_dir]     = Merb.root / "public" / "store"
+
+  # For FTP storage
+  p[:videos_store]            = :ftp
+  p[:ftp_server]              = "ftp.server.com"
+  p[:ftp_user]                = "FTPUSER"
+  p[:ftp_password]            = "FTPPASSWORD"
+  p[:videos_domain]           = "www.server.com"
   
   # ================================================
   # AWS Details
