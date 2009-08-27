@@ -50,12 +50,10 @@ class FTPStore
   end
   
   def ftp_login
-    if @ftp.closed?
-      @ftp.open(Panda::Config[:ftp_server])
-      @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
-      #Set to passive mode, EC2 was not being nice without this
-      @ftp.passive = true
-    end
+    @ftp.open(Panda::Config[:ftp_server]) if @ftp.closed?
+    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    #Set to passive mode, EC2 was not being nice without this
+    @ftp.passive = true
   end
     
 end
