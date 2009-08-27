@@ -30,7 +30,7 @@ class FTPStore
   
   # Return the publically accessible URL for the given key
   def url(key)
-    %(http://#{Panda::Config[:videos_domain]}/#{key})
+    %(http://#{Panda::Config[:videos_domain]}/#{key}.flv)
   end
   
   private
