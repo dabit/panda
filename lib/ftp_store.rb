@@ -19,13 +19,23 @@ class FTPStore
   
   # Get file. Raises FileDoesNotExistError if the file does not exist.
   def get(key, tmp_file)
-    raise "Method not implemented. Called abstract class."
+    ftp = Net::FTP.new(Panda::Config[:ftp_server])
+    ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    ftp.get(key, tmp_file)
+    ftp.close
+    
+    true
   end
   
   # Delete file. Returns true if success.
   # Raises FileDoesNotExistError if the file does not exist.
   def delete(key)
-    raise "Method not implemented. Called abstract class."
+    ftp = Net::FTP.new(Panda::Config[:ftp_server])
+    ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    ftp.delete(key)
+    ftp.close
+    
+    true
   end
   
   # Return the publically accessible URL for the given key
