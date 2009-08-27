@@ -5,24 +5,23 @@ class FTPStore
   
   def initialize
       raise Panda::ConfigError, "You must specify videos_domain, ftp_server and ftp_user to use ftp storage" unless Panda::Config[:videos_domain] && Panda::Config[:ftp_server] && Panda::Config[:ftp_user]
+      open_connection
   end
   
   # Set file. Returns true if success.
   def set(key, tmp_file)
-    ftp = Net::FTP.new(Panda::Config[:ftp_server])
-    ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
-    ftp.put(tmp_file)
-    ftp.close
+    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    @ftp.put(tmp_file)
+    @ftp.close
     
     true
   end
   
   # Get file. Raises FileDoesNotExistError if the file does not exist.
   def get(key, tmp_file)
-    ftp = Net::FTP.new(Panda::Config[:ftp_server])
-    ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
-    ftp.get(key, tmp_file)
-    ftp.close
+    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    @ftp.get(key, tmp_file)
+    @ftp.close
     
     true
   end
@@ -30,10 +29,9 @@ class FTPStore
   # Delete file. Returns true if success.
   # Raises FileDoesNotExistError if the file does not exist.
   def delete(key)
-    ftp = Net::FTP.new(Panda::Config[:ftp_server])
-    ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
-    ftp.delete(key)
-    ftp.close
+    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    @ftp.delete(key)
+    @ftp.close
     
     true
   end
@@ -48,5 +46,11 @@ class FTPStore
   def raise_file_error(key)
     Merb.logger.error "Tried to delete #{key} but the file does not exist"
     raise FileDoesNotExistError, "#{key} does not exist"
+  end
+  
+  def open_connection
+    ftp = Net::FTP.new(Panda::Config[:ftp_server])
+    #Set to passive mode, EC2 was not being nice without this
+    ftp.sendcmd('PAS')
   end
 end
