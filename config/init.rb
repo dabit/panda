@@ -42,6 +42,8 @@ Merb::BootLoader.after_app_loads do
     S3Store.new
   when :filesystem
     FileStore.new
+  when :sftp
+    SFTPStore.new
   else
     raise RuntimeError, "You have specified an invalid videos_store configuration option. Valid options are :s3 and :filesystem"
   end

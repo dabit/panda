@@ -39,6 +39,13 @@ Panda::Config.use do |p|
   # p[:videos_domain]         = "localhost:4000/store"
   # p[:public_videos_dir]     = Merb.root / "public" / "store"
   
+  # For SFTP filesystem storage:
+  # p[:videos_store]          = :sftp
+  # p[:videos_domain]         = "www.server.com"
+  # p[:sftp_user]             = "user"
+  # p[:sftp_password]         = "password"
+  # p[:sftp_server]           = "sftp.server.com"
+
   # ================================================
   # AWS Details
   # ================================================
