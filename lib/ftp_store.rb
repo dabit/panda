@@ -5,7 +5,6 @@ class FTPStore
   
   def initialize
       raise Panda::ConfigError, "You must specify videos_domain, ftp_server and ftp_user to use ftp storage" unless Panda::Config[:videos_domain] && Panda::Config[:ftp_server] && Panda::Config[:ftp_user]
-      open_connection
   end
   
   # Set file. Returns true if success.
@@ -45,15 +44,13 @@ class FTPStore
     raise FileDoesNotExistError, "#{key} does not exist"
   end
   
-  def open_connection
-    @ftp = Net::FTP.new(Panda::Config[:ftp_server])
-  end
-  
   def ftp_login
-    @ftp.open(Panda::Config[:ftp_server]) if @ftp.closed?
-    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
-    #Set to passive mode, EC2 was not being nice without this
-    @ftp.passive = true
-  end
-    
+    @ftp ||= Net::FTP.new
+    if @ftp.closed?
+      @ftp.connect(Panda::Config[:ftp_server])
+      @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+      #Set to passive mode, EC2 was not being nice without this
+      @ftp.passive = true
+    end
+  end    
 end
