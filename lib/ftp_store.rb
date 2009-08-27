@@ -10,7 +10,7 @@ class FTPStore
   
   # Set file. Returns true if success.
   def set(key, tmp_file)
-    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    ftp_login
     @ftp.put(tmp_file)
     @ftp.close
     
@@ -19,7 +19,7 @@ class FTPStore
   
   # Get file. Raises FileDoesNotExistError if the file does not exist.
   def get(key, tmp_file)
-    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    ftp_login
     @ftp.get(key, tmp_file)
     @ftp.close
     
@@ -29,7 +29,7 @@ class FTPStore
   # Delete file. Returns true if success.
   # Raises FileDoesNotExistError if the file does not exist.
   def delete(key)
-    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    ftp_login
     @ftp.delete(key)
     @ftp.close
     
@@ -50,7 +50,12 @@ class FTPStore
   
   def open_connection
     @ftp = Net::FTP.new(Panda::Config[:ftp_server])
-    #Set to passive mode, EC2 was not being nice without this
-    @ftp.voidcmd('passive')
   end
+  
+  def ftp_login
+    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+    #Set to passive mode, EC2 was not being nice without this
+    @ftp.sendcmd('passive')
+  end
+    
 end
