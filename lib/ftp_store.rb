@@ -11,7 +11,7 @@ class FTPStore
   # Set file. Returns true if success.
   def set(key, tmp_file)
     ftp_login
-    @ftp.put(tmp_file)
+    @ftp.put(tmp_file, key)
     @ftp.close
     
     true
@@ -55,7 +55,7 @@ class FTPStore
   def ftp_login
     @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
     #Set to passive mode, EC2 was not being nice without this
-    @ftp.sendcmd('passive')
+    @ftp.passive = true
   end
     
 end
