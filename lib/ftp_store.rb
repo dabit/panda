@@ -12,7 +12,6 @@ class FTPStore
   def set(key, tmp_file)
     ftp_login
     @ftp.put(tmp_file, key)
-    @ftp.close
     
     true
   end
@@ -21,7 +20,6 @@ class FTPStore
   def get(key, tmp_file)
     ftp_login
     @ftp.get(key, tmp_file)
-    @ftp.close
     
     true
   end
@@ -31,7 +29,6 @@ class FTPStore
   def delete(key)
     ftp_login
     @ftp.delete(key)
-    @ftp.close
     
     true
   end
@@ -53,9 +50,12 @@ class FTPStore
   end
   
   def ftp_login
-    @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
-    #Set to passive mode, EC2 was not being nice without this
-    @ftp.passive = true
+    if @ftp.closed?
+      @ftp.open(Panda::Config[:ftp_server])
+      @ftp.login(Panda::Config[:ftp_user], Panda::Config[:ftp_password])
+      #Set to passive mode, EC2 was not being nice without this
+      @ftp.passive = true
+    end
   end
     
 end
