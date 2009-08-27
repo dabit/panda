@@ -30,7 +30,7 @@ class FTPStore
   
   # Return the publically accessible URL for the given key
   def url(key)
-    raise "Method not implemented. Called abstract class."
+    %(http://#{Panda::Config[:videos_domain]}/#{key})
   end
   
   private
