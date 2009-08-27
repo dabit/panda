@@ -51,6 +51,6 @@ class FTPStore
   def open_connection
     @ftp = Net::FTP.new(Panda::Config[:ftp_server])
     #Set to passive mode, EC2 was not being nice without this
-    @ftp.voidcmd('PAS')
+    @ftp.voidcmd('passive')
   end
 end
