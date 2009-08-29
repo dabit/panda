@@ -1,6 +1,6 @@
 require 'net/ftp'
 
-class FTPStore
+class FTPStore < AbstractStore
   class FileDoesNotExistError < RuntimeError; end
   
   def initialize
